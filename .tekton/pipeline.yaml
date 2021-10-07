@@ -1,15 +1,25 @@
+# apiVersion: tekton.dev/v1beta1
+# kind: TaskRun
+# metadata:
+#   creationTimestamp: null
+#   generateName: pipeline-main
+# spec:
+#   resources: {}
+#   serviceAccountName: ""
+#   taskRef:
+#     name: hello
+# status:
+#   podName: ""
+# ---
+
 apiVersion: tekton.dev/v1beta1
-kind: TaskRun
+kind: Pipeline
 metadata:
-  creationTimestamp: null
-  generateName: hello-run-
-spec:
-  resources: {}
-  serviceAccountName: ""
-  taskRef:
-    name: hello
-status:
-  podName: ""
+  name: pipeline-main
+tasks:
+  - name: say-hello
+    taskRef:
+      name: hello
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
