@@ -16,10 +16,11 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: pipeline-main
-tasks:
-  - name: say-hello
-    taskRef:
-      name: hello
+spec:
+  tasks:
+    - name: say-hello
+      taskRef:
+        name: hello
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
