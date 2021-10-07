@@ -15,7 +15,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  generateName: pipeline-main
+  name: pipeline-main
 spec:
   serviceAccountName: dockerhub-builder
   pipelineRef:
