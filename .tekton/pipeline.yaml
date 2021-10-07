@@ -13,9 +13,39 @@
 # ---
 
 apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: pipeline-main
+  namespace: cloudbees-cd
+spec:
+  serviceAccountName: dockerhub-builder
+  pipelineRef:
+    name: pipeline
+  # workspaces:
+  # - name: shared-data
+  #   volumeClaimTemplate:
+  #     spec:
+  #       accessModes:
+  #       - ReadWriteOnce
+  #       resources:
+  #         requests:
+  #           storage: 1Gi
+  # - name: dockerconfig
+  #   secret:
+  #     secretName: dockerhub-docker-config
+  #     items:
+  #         - key: .dockerconfigjson
+  #           path: config.json
+  params:
+  - name: repo-url
+    value: https://github.com/swashbuck1r/simple-container-app
+  - name: branch-name
+    value: main
+---
+apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: pipeline-main
+  name: pipeline
 spec:
   tasks:
     - name: say-hello
