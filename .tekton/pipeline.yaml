@@ -16,7 +16,6 @@ apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
   generateName: pipeline-main
-  namespace: cloudbees-cd
 spec:
   serviceAccountName: dockerhub-builder
   pipelineRef:
