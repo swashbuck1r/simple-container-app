@@ -68,8 +68,8 @@ spec:
     workspaces:
       - name: source
         workspace: shared-data
-      - name: dockerconfig
-        workspace: dockerconfig
+      # - name: dockerconfig
+      #   workspace: dockerconfig
     params:
       - name: IMAGE
         value: swashbuck1r/simple-container-app:latest
@@ -80,7 +80,7 @@ kind: PipelineRun
 metadata:
   name: pipeline-main
 spec:
-  serviceAccountName: dockerhub-builder
+  # serviceAccountName: dockerhub-builder
   pipelineRef:
     name: pipeline
   workspaces:
@@ -92,12 +92,12 @@ spec:
         resources:
           requests:
             storage: 1Gi
-  - name: dockerconfig
-    secret:
-      secretName: dockerhub-docker-config
-      items:
-          - key: .dockerconfigjson
-            path: config.json
+  # - name: dockerconfig
+  #   secret:
+  #     secretName: dockerhub-docker-config
+  #     items:
+  #         - key: .dockerconfigjson
+  #           path: config.json
   params:
   - name: repo-url
     value: https://github.com/swashbuck1r/simple-container-app
