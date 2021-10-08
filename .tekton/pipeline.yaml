@@ -6,24 +6,6 @@ secrets:
   - name: dockerhub-docker-config
 ---
 apiVersion: tekton.dev/v1beta1
-kind: Task
-metadata:
-  name: hello
-spec:
-  steps:
-    - name: hello
-      image: ubuntu
-      script: |
-        #!/usr/bin/env bash
-        echo "Hello World!"
-        for i in {1..10}
-        do
-          echo "...looking around"
-          sleep 1s
-        done
-        echo "Goodbye World!"
----
-apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: pipeline
@@ -46,9 +28,6 @@ spec:
     description: |
       This workspace will receive the docker config secret.
   tasks:
-  # - name: say-hello
-  #   taskRef:
-  #     name: hello
   - name: git-clone-task
     taskRef:
       name: git-clone
@@ -80,7 +59,7 @@ kind: PipelineRun
 metadata:
   name: pipeline-main
 spec:
-  # serviceAccountName: dockerhub-builder
+  serviceAccountName: dockerhub-builder
   pipelineRef:
     name: pipeline
   workspaces:
