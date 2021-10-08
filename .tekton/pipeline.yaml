@@ -1,9 +1,9 @@
 apiVersion: v1
-   kind: ServiceAccount
-   metadata:
-     name: dockerhub-builder
-   secrets:
-     - name: dockerhub-docker-config
+kind: ServiceAccount
+metadata:
+  name: dockerhub-builder
+secrets:
+  - name: dockerhub-docker-config
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
