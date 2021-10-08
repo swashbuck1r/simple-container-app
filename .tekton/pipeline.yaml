@@ -1,17 +1,10 @@
-# apiVersion: tekton.dev/v1beta1
-# kind: TaskRun
-# metadata:
-#   creationTimestamp: null
-#   generateName: pipeline-main
-# spec:
-#   resources: {}
-#   serviceAccountName: ""
-#   taskRef:
-#     name: hello
-# status:
-#   podName: ""
-# ---
-
+apiVersion: v1
+   kind: ServiceAccount
+   metadata:
+     name: dockerhub-builder
+   secrets:
+     - name: dockerhub-docker-config
+---
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
@@ -35,34 +28,76 @@ kind: Pipeline
 metadata:
   name: pipeline
 spec:
+  description: |
+    Builds and publishes a docker image based on a git repo
+  params:
+  - name: repo-url
+    type: string
+    description: The git repository URL to clone from.
+  - name: branch-name
+    type: string
+    description: The git branch to clone.
+  workspaces:
+  - name: shared-data
+    description: |
+      This workspace will receive the cloned git repo and be passed
+      to the next Task for the repo's README.md file to be read.
+  - name: dockerconfig
+    description: |
+      This workspace will receive the docker config secret.
   tasks:
-    - name: say-hello
-      taskRef:
-        name: hello
+  # - name: say-hello
+  #   taskRef:
+  #     name: hello
+  - name: git-clone-task
+    taskRef:
+      name: git-clone
+    workspaces:
+    - name: output
+      workspace: shared-data
+    params:
+    - name: url
+      value: $(params.repo-url)
+    - name: revision
+      value: $(params.branch-name)
+  - name: source-to-image
+    taskRef:
+      name: kaniko
+    runAfter:
+      - git-clone-task
+    workspaces:
+      - name: source
+        workspace: shared-data
+      - name: dockerconfig
+        workspace: dockerconfig
+    params:
+      - name: IMAGE
+        value: swashbuck1r/simple-container-app:latest
+
 ---
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
   name: pipeline-main
 spec:
-  # serviceAccountName: dockerhub-builder
+  serviceAccountName: dockerhub-builder
   pipelineRef:
     name: pipeline
-  # workspaces:
-  # - name: shared-data
-  #   volumeClaimTemplate:
-  #     spec:
-  #       accessModes:
-  #       - ReadWriteOnce
-  #       resources:
-  #         requests:
-  #           storage: 1Gi
-  # - name: dockerconfig
-  #   secret:
-  #     secretName: dockerhub-docker-config
-  #     items:
-  #         - key: .dockerconfigjson
-  #           path: config.json
+  workspaces:
+  - name: shared-data
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+  - name: dockerconfig
+    secret:
+      secretName: dockerhub-docker-config
+      items:
+          - key: .dockerconfigjson
+            path: config.json
   params:
   - name: repo-url
     value: https://github.com/swashbuck1r/simple-container-app
