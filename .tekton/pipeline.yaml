@@ -79,6 +79,7 @@ spec:
             path: config.json
   params:
   - name: repo-url
+    #REPO_URL: {{REPO_URL}}
     value: https://github.com/swashbuck1r/simple-container-app
   - name: branch-name
     value: main
