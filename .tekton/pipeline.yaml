@@ -19,6 +19,9 @@ spec:
   - name: branch-name
     type: string
     description: The git branch to clone.
+  - name: image
+    type: string
+    description: "The image uri (ex: CONTAINER_URL/IMAGE_NAME:TAG)."
   workspaces:
   - name: shared-data
     description: |
@@ -51,7 +54,7 @@ spec:
         workspace: dockerconfig
     params:
       - name: IMAGE
-        value: swashbuck1r/simple-container-app:latest
+        value: $(params.image)
 
 ---
 apiVersion: tekton.dev/v1beta1
@@ -78,8 +81,9 @@ spec:
           - key: .dockerconfigjson
             path: config.json
   params:
-  - name: repo-url
-    #REPO_URL: {{REPO_URL}}
-    value: https://github.com/swashbuck1r/simple-container-app
+  - name: repo-url 
+    value: {{REPO_URL}}
   - name: branch-name
-    value: main
+    value: {{BRANCH_NAME}}
+  - name: image
+    value: {{IMAGE}}:{{IMAGE_TAG}}
