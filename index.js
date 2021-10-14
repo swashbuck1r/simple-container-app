@@ -6,5 +6,5 @@ app.listen(3000, function() {
 });
 
 app.get("/", function(req, res) {
-  res.send("Hello 0.0.6! (: ");
+  res.send("Hello from 9:21! (: ");
 });
