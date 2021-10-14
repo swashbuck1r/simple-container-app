@@ -6,5 +6,5 @@ app.listen(3000, function() {
 });
 
 app.get("/", function(req, res) {
-  res.send("Strachan is the Jenkinsfile foo master! (: ");
+  res.send("Hello 0.0.4! (: ");
 });
