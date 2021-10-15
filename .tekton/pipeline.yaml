@@ -3,6 +3,9 @@ kind: Task
 metadata:
   name: hello
 spec:
+  params:
+  - name: message
+    description: message to append to Hello/Goodbye
   steps:
     - name: hello
       image: ubuntu
@@ -29,6 +32,9 @@ spec:
   - name: hello
     taskRef:
       name: hello
+    params:
+    - name: message
+      description: message to append to Hello/Goodbye
 ---
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
