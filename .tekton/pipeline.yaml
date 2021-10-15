@@ -34,7 +34,7 @@ spec:
       name: hello
     params:
     - name: message
-      description: message to append to Hello/Goodbye
+      value: $(params.message)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
